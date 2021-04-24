@@ -6,7 +6,14 @@
         <q-btn dense flat round icon="menu" @click="left = !left" />
 
         <q-toolbar-title class="text-weight-bold">
-          Qwitter
+          <span class="gt-sm">Qwitter</span> 
+
+            <q-icon
+            size="sm"
+            color="primary"
+            class="q-pa-md lt-md header-icon"
+            name="fab fa-suse" 
+            />
         </q-toolbar-title>
 
       </q-toolbar>
@@ -132,3 +139,11 @@ export default {
   }
 }
 </script>
+<style lang="sass">
+.header-icon 
+  position : absolute 
+  bottom : 0 
+  left : 50% 
+  transform : translateX(-50%) 
+  
+</style>
