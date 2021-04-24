@@ -6,7 +6,7 @@
         <q-btn dense flat round icon="menu" @click="left = !left" />
 
         <q-toolbar-title class="text-weight-bold">
-          <span class="gt-sm">Qwitter</span> 
+          <span class="gt-sm">{{ $route.name }}</span> 
 
             <q-icon
             size="sm"
@@ -41,6 +41,7 @@
         to="/"
         clickable 
         v-ripple
+        exact
         >
           <q-item-section avatar>
             <q-icon  name="home" size="md" />
@@ -52,6 +53,7 @@
         to="/about"
         clickable 
         v-ripple
+        exact
         >
           <q-item-section avatar>
             <q-icon  name="help" size="md" />
@@ -145,5 +147,5 @@ export default {
   bottom : 0 
   left : 50% 
   transform : translateX(-50%) 
-  
+
 </style>
