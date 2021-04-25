@@ -47,7 +47,8 @@
             <q-item-label class="text-subtitle1"> 
                 <strong> Mr.Robot </strong> 
                 <span class="text-grey-7">
-                  @fsociety
+                  @fsociety 
+                  <br class="lt-md">&bull; {{ qweet.date | relativeDate}}
                 </span>
             </q-item-label>
             <q-item-label class="qtweet-content text-body1" >
@@ -62,9 +63,7 @@
             </div>
           </q-item-section>
 
-          <q-item-section side top> 
-            {{ qweet.date | relativeDate}}
-          </q-item-section>
+
         </q-item>
       </transition-group>
     </q-list>
