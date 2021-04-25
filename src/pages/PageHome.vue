@@ -31,7 +31,7 @@
 
 
     <q-list separator>
-        <q-item class="q-py-md" v-for="qweet in qweets" :key="qweet.date">
+        <q-item class="q-py-md" v-for="(qweet,index) in qweets" :key="qweet.date">
           <q-item-section avatar top>
             <q-avatar>
               <img :src="avatarLink">
@@ -53,7 +53,7 @@
               <q-btn flat round color="grey" icon="far fa-comment" size="sm" />
               <q-btn flat round color="grey" icon="fas fa-retweet" size="sm" />
               <q-btn flat round color="grey" icon="far fa-heart" size="sm" />
-              <q-btn flat round color="grey" icon="fas fa-trash" size="sm" />
+              <q-btn flat round color="grey" icon="fas fa-trash" size="sm" @click="deleteQweet(index)" />
             </div>
           </q-item-section>
 
@@ -100,6 +100,10 @@ export default {
         date : Date.now()
       }
       this.qweets.unshift(qweet)
+      this.newQweet = ''
+    },
+    deleteQweet(index){
+      this.qweets.splice(index,1)
     }
   }
 }
