@@ -30,8 +30,8 @@
     <!-- tweets -->
 
 
-    <q-list >
-        <q-item class="q-py-md">
+    <q-list separator>
+        <q-item class="q-py-md" v-for="qweet in qweets" :key="qweet.date">
           <q-item-section avatar top>
             <q-avatar>
               <img :src="avatarLink">
@@ -45,8 +45,8 @@
                   @fsociety
                 </span>
             </q-item-label>
-            <q-item-label class="qtweet-content text-body1" >Lorem ipsum dolor sit, amet consectetur adipisicing elit.Repellat recusandae perferendis itaque in modi facere quos deserunt officiis cum! Rerum voluptate
-              inventore magnam iste exercitationem dolorem id consequatur sit harum?
+            <q-item-label class="qtweet-content text-body1" >
+              {{ qweet.content }}
             </q-item-label>
 
             <div class="row justify-between q-mt-sm qweet-icons">
@@ -57,8 +57,8 @@
             </div>
           </q-item-section>
 
-          <q-item-section side top>
-            1 min ago
+          <q-item-section side top> 
+            {{ qweet.date | relativeDate}}
           </q-item-section>
         </q-item>
 
@@ -68,12 +68,29 @@
 </template>
 
 <script>
+import { formatDistance } from 'date-fns'
+
 export default {
   name: 'PageHome',
   data(){
     return {
       newQweet : '',
       avatarLink : "https://avatarfiles.alphacoders.com/163/thumb-1920-163207.jpg",
+      qweets : [
+        {
+          content : "Lorem ipsum dolor sit,inventore magnam iste exercitationem dolorem id consequatur sit harum? ",
+          date : 1619307994862,
+        },
+        {
+          content : "Lorem ipsum dolor sit,inventore magnam iste exercitationem dolorem id consequatur sit harum? ",
+          date : 1619305039994,
+        }        
+      ]
+    }
+  },
+  filters : {
+    relativeDate(value){
+      return formatDistance(value, new Date(), { addSuffix: true })
     }
   }
 }
