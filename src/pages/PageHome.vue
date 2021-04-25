@@ -21,7 +21,7 @@
       </div>
 
       <div class="col col-shrink">
-          <q-btn class="q-mb-lg" :disable="!newQweet" unelevated rounded color="primary" label="Qweet"  no-caps/>
+          <q-btn class="q-mb-lg" :disable="!newQweet" unelevated rounded color="primary" label="Qweet"  @click="addNewQweet" no-caps/>
       </div>
     </div>
 
@@ -91,6 +91,15 @@ export default {
   filters : {
     relativeDate(value){
       return formatDistance(value, new Date(), { addSuffix: true })
+    }
+  },
+  methods : {
+    addNewQweet(){
+      let qweet = {
+        content : this.newQweet,
+        date : Date.now()
+      }
+      this.qweets.unshift(qweet)
     }
   }
 }
