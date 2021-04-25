@@ -31,7 +31,12 @@
 
 
     <q-list separator>
-        <q-item class="q-py-md" v-for="(qweet,index) in qweets" :key="qweet.date">
+      <transition-group
+        appear
+        enter-active-class="animated fadeIn slow"
+        leave-active-class="animated fadeOut slow"
+      >
+        <q-item class="q-py-md qweet" v-for="(qweet,index) in qweets" :key="qweet.date">
           <q-item-section avatar top>
             <q-avatar>
               <img :src="avatarLink">
@@ -61,7 +66,7 @@
             {{ qweet.date | relativeDate}}
           </q-item-section>
         </q-item>
-
+      </transition-group>
     </q-list>
 
   </q-page>
@@ -121,4 +126,6 @@ export default {
   white-space: pre-line
 .qweet-icons
   margin-left : -5px
+.qweet:not(:first-child)
+  border-top : 1px solid rgba(0 ,0 ,0, 0.12)
 </style>
