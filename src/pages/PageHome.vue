@@ -37,7 +37,7 @@
           enter-active-class="animated fadeIn slow"
           leave-active-class="animated fadeOut slow"
         >
-          <q-item class="q-py-md qweet" v-for="(qweet,index) in qweets" :key="qweet.date">
+          <q-item class="q-py-md qweet" v-for="qweet in qweets" :key="qweet.id">
             <q-item-section avatar top>
               <q-avatar>
                 <img :src="avatarLink">
@@ -60,7 +60,7 @@
                 <q-btn flat round color="grey" icon="far fa-comment" size="sm" />
                 <q-btn flat round color="grey" icon="fas fa-retweet" size="sm" />
                 <q-btn flat round color="grey" icon="far fa-heart" size="sm" />
-                <q-btn flat round color="grey" icon="fas fa-trash" size="sm" @click="deleteQweet(index)" />
+                <q-btn flat round color="grey" icon="fas fa-trash" size="sm" @click="deleteQweet(qweet)" />
               </div>
             </q-item-section>
 
@@ -103,6 +103,7 @@ export default {
 
             snapshot.docChanges().forEach((change) => {
               let qweetChange = change.doc.data()
+              qweetChange.id = change.doc.id
               if (change.type === "added") {
                   this.qweets.unshift(qweetChange)
               }
@@ -111,6 +112,8 @@ export default {
               }
               if (change.type === "removed") {
                   console.log("Removed qweet: ", qweetChange)
+                  let index = this.qweets.findIndex(qweet => qweet.id === qweetChange.id)
+                  this.qweets.splice(index,1)
               }
         })
     })
@@ -123,23 +126,25 @@ export default {
   },
   methods : {
     addNewQweet(){
-      let qweet = {
-        content : this.newQweet,
-        date : Date.now()
-      }
-      // this.qweets.unshift(qweet)
-      // Add a new document with a generated id.
-      db.collection('qweets').add(qweet)
-      .then((docRef) => {
-          console.log("Document written with ID: ", docRef.id)
-      })
-      .catch((error) => {
-          console.error("Error adding document: ", error)
-      })
-      this.newQweet = ''
+        let qweet = {
+          content : this.newQweet,
+          date : Date.now()
+        }
+        db.collection('qweets').add(qweet)
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id)
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error)
+        })
+        this.newQweet = ''
     },
-    deleteQweet(index){
-      this.qweets.splice(index,1)
+    deleteQweet(qweet){
+      db.collection("qweets").doc(qweet.id).delete().then(() => {
+          console.log("Document successfully deleted!")
+      }).catch((error) => {
+          console.error("Error removing document: ", error)
+      });
     }
   }
 }
