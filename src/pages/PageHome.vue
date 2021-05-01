@@ -59,7 +59,11 @@
               <div class="row justify-between q-mt-sm qweet-icons">
                 <q-btn flat round color="grey" icon="far fa-comment" size="sm" />
                 <q-btn flat round color="grey" icon="fas fa-retweet" size="sm" />
-                <q-btn flat round color="grey" icon="far fa-heart" size="sm" />
+                <q-btn flat round 
+                @click="likeQweet(qweet)"
+                :color="qweet.liked ? 'pink' :'grey' " 
+                :icon="qweet.liked ? 'fas fa-heart' : 'far fa-heart'" 
+                size="sm" />
                 <q-btn flat round color="grey" icon="fas fa-trash" size="sm" @click="deleteQweet(qweet)" />
               </div>
             </q-item-section>
@@ -85,12 +89,16 @@ export default {
       qweets : [ 
 
         // {
+        //   id : 1,
         //   content : "Lorem ipsum dolor sit,inventore magnam iste exercitationem dolorem id consequatur sit harum? ",
         //   date : 1619307994862,
+        //   liked : false,
         // },
         // {
+        //   id:2,
         //   content : "Lorem ipsum dolor sit,inventore magnam iste exercitationem dolorem id consequatur sit harum? ",
         //   date : 1619305039994,
+        //   liked : true,
         // }    
 
       ]
@@ -108,10 +116,11 @@ export default {
                   this.qweets.unshift(qweetChange)
               }
               if (change.type === "modified") {
-                  console.log("Modified qweet: ", qweetChange);
+                  let index = this.qweets.findIndex(qweet => qweet.id === qweetChange.id)
+                  Object.assign(this.qweets[index],qweetChange)
+
               }
               if (change.type === "removed") {
-                  console.log("Removed qweet: ", qweetChange)
                   let index = this.qweets.findIndex(qweet => qweet.id === qweetChange.id)
                   this.qweets.splice(index,1)
               }
@@ -128,11 +137,11 @@ export default {
     addNewQweet(){
         let qweet = {
           content : this.newQweet,
-          date : Date.now()
+          date : Date.now(),
+          liked : false
         }
         db.collection('qweets').add(qweet)
-        .then((docRef) => {
-            console.log("Document written with ID: ", docRef.id)
+        .then(() => {
         })
         .catch((error) => {
             console.error("Error adding document: ", error)
@@ -141,10 +150,20 @@ export default {
     },
     deleteQweet(qweet){
       db.collection("qweets").doc(qweet.id).delete().then(() => {
-          console.log("Document successfully deleted!")
       }).catch((error) => {
           console.error("Error removing document: ", error)
       });
+    },
+    likeQweet(qweet){
+
+      db.collection("qweets").doc(qweet.id).update({
+            liked: !qweet.liked
+        })
+        .then(() => {
+        })
+        .catch((error) => {
+            console.error("Error updating document: ", error);
+        });
     }
   }
 }
