@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import db from 'boot/firebase'
 import { formatDistance } from 'date-fns'
 
 export default {
@@ -81,17 +82,39 @@ export default {
     return {
       newQweet : '',
       avatarLink : "https://avatarfiles.alphacoders.com/163/thumb-1920-163207.jpg",
-      qweets : [
-        {
-          content : "Lorem ipsum dolor sit,inventore magnam iste exercitationem dolorem id consequatur sit harum? ",
-          date : 1619307994862,
-        },
-        {
-          content : "Lorem ipsum dolor sit,inventore magnam iste exercitationem dolorem id consequatur sit harum? ",
-          date : 1619305039994,
-        }        
+      qweets : [ 
+
+        // {
+        //   content : "Lorem ipsum dolor sit,inventore magnam iste exercitationem dolorem id consequatur sit harum? ",
+        //   date : 1619307994862,
+        // },
+        // {
+        //   content : "Lorem ipsum dolor sit,inventore magnam iste exercitationem dolorem id consequatur sit harum? ",
+        //   date : 1619305039994,
+        // }    
+
       ]
     }
+  },
+  mounted () {
+
+
+    db.collection("qweets").orderBy('date').onSnapshot((snapshot) => {
+
+            snapshot.docChanges().forEach((change) => {
+              let qweetChange = change.doc.data()
+              if (change.type === "added") {
+                  this.qweets.unshift(qweetChange)
+              }
+              if (change.type === "modified") {
+                  console.log("Modified qweet: ", qweetChange);
+              }
+              if (change.type === "removed") {
+                  console.log("Removed qweet: ", qweetChange)
+              }
+        })
+    })
+    
   },
   filters : {
     relativeDate(value){
